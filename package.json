@@ -8,14 +8,18 @@
   "scripts": {
     "preinstall": "yarn fetch-deps && yarn compile && yarn copy-libs && yarn build",
     "build": "rm -rf dist/ && tsc && cp lib/torch.* dist/",
+    "test": "jest --watch",
     "fetch-deps": "scripts/fetch-native-deps.sh",
     "copy-libs": "scripts/copy-libs.sh",
     "compile": "cmake-js compile --CDCMAKE_PREFIX_PATH=./extern/libtorch",
     "rebuild": "cmake-js rebuild --CDCMAKE_PREFIX_PATH=./extern/libtorch"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.11",
     "cmake-js": "^4.0.1",
+    "jest": "^24.7.1",
     "node-addon-api": "^1.6.1",
+    "ts-jest": "^24.0.2",
     "typescript": "^3.1.6"
   },
   "dependencies": {
