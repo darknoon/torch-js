@@ -1,5 +1,6 @@
 import * as torch from "../../lib";
 import { rand, tensor, Tensor } from "../../lib";
+import { exec } from "child_process";
 
 test("can create a tensor from a Float32Array", () => {
   // Testing initialization from object

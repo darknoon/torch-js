@@ -15,8 +15,8 @@ public:
 
   torch::Tensor tensor();
 
-private:
   static Napi::FunctionReference constructor;
+private:
   torch::Tensor tensor_;
 
   Napi::Value toString(const Napi::CallbackInfo &);

@@ -14,6 +14,7 @@ namespace aten {
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("rand", Napi::Function::New(env, rand));
+  exports.Set("add",  Napi::Function::New(env, add));
   return exports;
 }
 
@@ -41,6 +42,34 @@ Napi::Value rand(const Napi::CallbackInfo &info) {
   }
   auto rand_tensor = torch::rand(sizes, options);
   return scope.Escape(Tensor::FromTensor(info.Env(), rand_tensor));
+}
+
+Napi::Value add(const Napi::CallbackInfo &info) {
+   Napi::EscapableHandleScope scope(info.Env());
+
+  auto a = info[0];
+  auto b = info[1];
+  Tensor* at = nullptr;
+  Tensor* bt = nullptr;
+  if (a.IsObject()) {
+    at = Napi::ObjectWrap<Tensor>::Unwrap(a.As<Napi::Object>());
+  }
+  if (b.IsObject()) {
+    bt = Napi::ObjectWrap<Tensor>::Unwrap(b.As<Napi::Object>());
+  }
+
+  torch::Tensor result;
+  if (at != nullptr && bt != nullptr) {
+    result = at::add(at->tensor(), bt->tensor());
+  } else if (at != nullptr && b.IsNumber()) {
+    result = at::add(at->tensor(), b.As<Napi::Number>().DoubleValue());
+  } else if (a.IsNumber() && bt != nullptr) {
+    result = at::add(bt->tensor(), a.As<Napi::Number>().DoubleValue());
+  } else {
+    // TODO: throw exception!
+    return Napi::Value::From(info.Env(), nullptr);
+  }
+  return scope.Escape(Tensor::FromTensor(info.Env(), result));
 }
 
 } // namespace aten

@@ -24,3 +24,6 @@ export function rand(shape: number[], options?: {dtype?: number}): Tensor;
 // The function actually support options at the end but TS can't express that
 export function rand(...shape: number[] /**, options?: {dtype?: number} */):
     Tensor;
+export function add(a: Tensor, b: Tensor): Tensor;
+export function add(a: Tensor, b: Number): Tensor;
+export function add(a: Number, b: Tensor): Tensor;
